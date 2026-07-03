@@ -57,6 +57,19 @@ class ConverterWorker(QThread):
             except Exception:
                 ch_labels = [f"CH{i+1}" for i in range(n_ch)]
 
+            # Drop channels without a usable name. These are typically unused
+            # padding channels (e.g. all-zero) that carry no signal; keeping
+            # them would also break MNE, which requires every ch_name to be a
+            # non-empty string.
+            keep = [
+                i for i, lab in enumerate(ch_labels)
+                if isinstance(lab, str) and lab.strip()
+            ]
+            if len(keep) < len(ch_labels):
+                dropped = len(ch_labels) - len(keep)
+                self.log.emit(f"Skipping {dropped} unnamed channel(s).")
+            ch_labels = [ch_labels[i] for i in keep]
+
             # Use "eeg" ch_type only for streams that self-identify as EEG and
             # scale µV → V. Everything else (ECG, EMG, power, etc.) gets "misc"
             # with no scaling, avoiding MNE's unit enforcement.
@@ -70,6 +83,7 @@ class ConverterWorker(QThread):
                 self.log.emit(f"Channel type: misc  (raw LSL units, no scaling)")
 
             data = eeg_stream["time_series"].T * scale   # (n_ch, n_samples)
+            data = data[keep, :]                          # keep named channels only
 
             info = mne.create_info(
                 ch_names=ch_labels,
