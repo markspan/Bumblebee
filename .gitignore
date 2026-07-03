@@ -9,5 +9,4 @@ wheels/
 # Virtual environments
 .venv
 nuitka-crash-report.xml
-nuitka_compile.bat
 bumblebee v0.1.0.exe
