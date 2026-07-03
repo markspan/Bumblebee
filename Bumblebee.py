@@ -1,5 +1,5 @@
 """
-sluice.py  –  XDF → BrainVision Analyzer converter
+Bumblebee.py  –  XDF → BrainVision Analyzer converter
 Requires: pip install mne pyxdf PySide6
 """
 
@@ -134,7 +134,7 @@ class MainWindow(QMainWindow):
     # ── UI construction ──────────────────────────────────────────────────────
 
     def _setup_ui(self):
-        self.setWindowTitle("Sluice  –  XDF → BrainVision")
+        self.setWindowTitle("Bumblebee  –  XDF → BrainVision")
         self.setMinimumSize(820, 620)
 
         self.setStyleSheet("""
@@ -232,7 +232,7 @@ class MainWindow(QMainWindow):
         layout.setSpacing(14)
 
         # ── Title ──
-        title = QLabel("Sluice  –  XDF → BrainVision")
+        title = QLabel("Bumblebee  –  XDF → BrainVision")
         title.setFont(QFont("Segoe UI", 18, QFont.Weight.Light))
         title.setStyleSheet("color:#4a8fe8; letter-spacing:1px;")
         layout.addWidget(title)
